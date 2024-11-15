@@ -1,0 +1,129 @@
+<style>
+    .deco-file label{
+        display: inline-block;
+        border: 5px solid #1E88E5;
+        color: #1E88E5;
+        text-align: center;
+        padding: 5px 15px;
+    }
+    .deco-file label:hover{
+        cursor: pointer;
+    }
+
+    .deco-file input[type="file"]{
+        display: none;
+    }
+
+    #preview{
+	vertical-align: top;
+        display: inline-block;
+	margin-left:15px;
+        width:50%;
+    }
+
+    #previewImage{
+        width:100px;
+    }
+
+    .camera {
+        display: inline-block;
+        vertical-align: middle;
+        color: #39a9d6;
+        line-height: 1;
+        position: relative;
+        width: 1.25em;
+        height: 0.85em;
+        background: currentColor;
+        border: 0.1em solid currentColor;
+        border-radius: 0.1em;
+        box-sizing: content-box;
+    }
+
+    .camera::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 100%;
+        width: 40%;
+        height: 0.1375em;
+        background: inherit;
+        border: 0.1em solid currentColor;
+        border-bottom: 0;
+        border-radius: 0.225em 0.225em 0 0;
+        box-sizing: content-box;
+        transform: translateX(-50%);
+    }
+
+    .camera::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 0.646em;
+        height: 0.646em;
+        border: 0.125em solid currentColor;
+        border-color: #fff;
+        border-radius: 50%;
+        box-sizing: border-box;
+        box-shadow: 0.39em -0.27em 0 -0.27em #fff;
+    }
+</style>
+
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <script>
+
+    function imgPreView(event){
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        var preview = document.getElementById("preview");
+        var previewImage = document.getElementById("previewImage");
+  
+        if(previewImage != null)
+            preview.removeChild(previewImage);
+
+        reader.onload = function(event) {
+        var img = document.createElement("img");
+        img.setAttribute("src", reader.result);
+        img.setAttribute("id", "previewImage");
+        preview.appendChild(img); 
+        };
+    reader.readAsDataURL(file);
+    } 
+
+    </script>
+
+</head>
+
+
+<h1>入力フォーム</h1><hr>
+
+    <div style="padding: 15px;">
+    <!--   -->
+
+    <form action="{% url 'contact:contact_form' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div>
+	<label>状況：<br>
+	<input type="text" name="message" style="width:300px;height:100px;"></label>
+	</div>
+	<br>
+
+	<div class="deco-file">
+	<label><span class="camera"></span> 写 真<input type="file" id="form" name="img" capture="environment" onChange="imgPreView(event)"></label>
+	<span id="preview"></span>
+	</div>
+        <br>
+        <br>
+
+        <input type="submit" value="送信">
+    </form>
+    </div>
+
+
